@@ -80,14 +80,23 @@ async function postData(endpoint, data) {
  * @returns {Promise<Response>} Fetch response object.
  */
 async function getData(uid, token) {
-    const endpoint = (uid && token) ? `activate/${uid}/${token}/` : `video/`
+    const endpoint = (uid && token) ? `activate/${uid}/${token}/` : `video/`;
+    const authToken = localStorage.getItem('authToken'); // JWT aus LocalStorage
+
+    const headers = {
+        'Content-Type': 'application/json',
+    };
+
+    if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`; // JWT hinzufügen
+    }
+
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
+        headers: headers,
+        // credentials nur noch bei Login/Logout nötig, hier nicht
     });
+
     return response;
 }
 
