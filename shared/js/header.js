@@ -9,18 +9,15 @@
  */
 async function logOut() {
     try {
-        const csrfToken = document.cookie.split('csrftoken=')[1].split(';')[0];
+        // JWT-Cookies werden automatisch mit credentials: 'include' gesendet
         await fetch(`${API_BASE_URL}logout/`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken
-            },
             credentials: 'include',
         });
-        showToastAndRedirect(false, ["Successfully logged out!"], "../auth/login.html", TOAST_DURATION);
 
+        showToastAndRedirect(false, ["Successfully logged out!"], "../auth/login.html", TOAST_DURATION);
     } catch (error) {
+        console.error("Logout error:", error);
         showToastAndRedirect(true, ["Logout error, redirecting..."], "../auth/login.html", TOAST_DURATION);
     }
     clearInterval(STARTINTERVALL);
